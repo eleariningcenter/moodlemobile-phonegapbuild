@@ -234,7 +234,12 @@ angular.module('mm.core')
             return !!window.device;
         };
                 self.isOnline = function() {
-            return typeof navigator.connection === 'undefined' || $cordovaNetwork.isOnline();
+            var online = typeof navigator.connection === 'undefined' || $cordovaNetwork.isOnline();
+            // Double check we are not online because we cannot rely 100% in Cordova APIs.
+            if (!online && navigator.onLine) {
+                online = true;
+            }
+            return online;
         };
                 self.isNetworkAccessLimited = function() {
             if (typeof navigator.connection === 'undefined') {
